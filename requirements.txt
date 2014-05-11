@@ -2,3 +2,4 @@ django-ckeditor-updated==4.2.8
 django-mptt==0.6.0
 django-mptt-admin==0.1.8
 easy-thumbnails==1.5
+South>=0.7.5

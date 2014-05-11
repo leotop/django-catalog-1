@@ -1,0 +1,22 @@
+Django-catalog
+==============
+
+Каталог товаров для Django
+
+## Установка
+
+    $ cd path/to/project/project
+    $ git clone https://github.com/xevinbox/django-catalog.git catalog
+    $ pip install -r catalog/requirements.txt
+
+Добавляем в **INSTALLED\_APPS**, также добавляем South и django\_mptt\_admin если они не были там прописаны.
+
+    $ ../manage.py syncdb
+    $ ../manage.py migrate catalog --fake
+
+В **urls.py** прописываем что-то вроде:
+
+    urlpatterns = patterns('',
+        url(r'^$', include('myproject.catalog.urls')),
+        ...
+    )
