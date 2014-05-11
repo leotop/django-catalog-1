@@ -10,9 +10,6 @@ class Category(MPTTModel):
     description = models.TextField(_(u'Description'), blank=True, null=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
 
-    #class MPTTMeta:
-    #    order_insertion_by = ['name']
-
     def get_absolute_url(self):
         return '/category/%d/' % self.id
 
@@ -59,9 +56,8 @@ class Manufacturer(models.Model):
 
 class Product(models.Model):
     name = models.CharField(_(u'Name'), max_length = 127)
-    #image = models.ImageField(_(u'Image'), blank=True, upload_to="catalog/product/")
     description = models.TextField(_(u'Description'), blank=True, null=True)
-    price = models.IntegerField(_(u'Price'), default=13)
+    price = models.IntegerField(_(u'Price'), default=0)
     category = models.ForeignKey(Category, verbose_name=_(u'Category'))
     manufacturer = models.ForeignKey(Manufacturer, verbose_name=_(u'Manufacturer'))
     on_demand = models.BooleanField(_(u'On Demand'), default=False)

@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django import forms
 from models import Category, Manufacturer, Product, ProductImages, ProductAttribute
 from mptt.admin import MPTTModelAdmin
-from ckeditor.widgets import CKEditorWidget
+#from ckeditor.widgets import CKEditorWidget
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 # ACTIONS
@@ -69,19 +69,19 @@ class ChangeManufacturerForm(forms.Form):
     manufacturer = forms.ModelChoiceField(queryset=Manufacturer.objects.all(), label=u'Новый производитель')
 
 class ProductAdminForm(forms.ModelForm):
-    description = forms.CharField(widget=CKEditorWidget())
+    #description = forms.CharField(widget=CKEditorWidget())
 
     class Meta:
         model = Product
 
 class ManufacturerAdminForm(forms.ModelForm):
-    description = forms.CharField(widget=CKEditorWidget())
+    #description = forms.CharField(widget=CKEditorWidget())
 
     class Meta:
         model = Manufacturer
 
 class CategoryAdminForm(forms.ModelForm):
-    description = forms.CharField(widget=CKEditorWidget())
+    #description = forms.CharField(widget=CKEditorWidget())
 
     class Meta:
         model = Category
