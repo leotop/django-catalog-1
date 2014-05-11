@@ -1,0 +1,93 @@
+{% extends "catalog/base.html" %}
+{% load thumbnail %}
+{% load category_extras %}
+
+{% block catalogtree %}
+  {% category_tree %}
+{% endblock %}
+
+{% block content %}
+<div class="col-md-9 col-sm-9">
+  <div class="content shadow panel">
+    <div class="panel-heading">Производитель &laquo;{{ manufacturer.name }}&raquo;</div>
+    <div class="panel-body">
+
+      {% if manufacturer.description %}
+      <div class="container-fluid">
+        <div class="row manufacturer-description">
+          {% if manufacturer.image %}<img src="/media/{{ manufacturer.image }}" class="manufacturer-image" />{% endif %}
+          {{ manufacturer.description|safe }}
+        </div>
+      </div>
+      {% endif %}
+      {% if editable %}
+      <a class="btn btn-warning AddToCartButton" href="/admin/catalog/manufacturer/{{ manufacturer.id }}/">Редактировать</a>
+      {% endif %}
+
+      <h2>Товары марки &laquo;{{ manufacturer.name }}&raquo;</h2>
+
+      {% if products.paginator.num_pages >= 2 %}
+      <hr>
+      <!-- pagination -->
+      <div class="container-fluid">
+      <ul class="pagination">
+        {% if products.has_previous %}
+        <li><a href="?page={{ products.previous_page_number }}">&laquo;</a>
+        {% endif %}
+
+        {% for pg in products.paginator.page_range %}
+          <li {% if pg == products.number %}class="active" {% endif %}><a href="?page={{ pg }}">{{ pg }}</a>
+        {% endfor %}
+
+        {% if products.has_next %}
+        <li><a href="?page={{ products.next_page_number }}">&raquo;</a>
+        {% endif %}
+      </ul>
+      </div>
+      <!-- /pagination -->
+      {% endif %}
+
+      <div class="container-fluid">
+      {% for p in products %}
+        {% if forloop.first %}
+        <div class="row">
+        {% endif %}
+
+        {% include "catalog/product.html" with short_view=1 %}
+
+        {% if forloop.counter|divisibleby:"2" %}
+        </div><!-- /row -->
+        <div class="row">
+        {% endif %}
+
+        {% if forloop.last %}
+        </div><!-- /row -->
+        {% endif %}
+      {% endfor %}
+      </div><!-- /container-fluid -->
+
+  </div><!-- /container -->
+
+      {% if products.paginator.num_pages >= 2 %}
+      <!-- pagination -->
+      <div class="panel-footer">
+      <ul class="pagination">
+        {% if products.has_previous %}
+        <li><a href="?page={{ products.previous_page_number }}">&laquo;</a>
+        {% endif %}
+
+        {% for pg in products.paginator.page_range %}
+          <li {% if pg == products.number %}class="active" {% endif %}><a href="?page={{ pg }}">{{ pg }}</a>
+        {% endfor %}
+
+        {% if products.has_next %}
+        <li><a href="?page={{ products.next_page_number }}">&raquo;</a>
+        {% endif %}
+      </ul>
+      </div>
+      <!-- /pagination -->
+      {% endif %}
+
+  </div><!-- /content -->
+</div><!-- /col-md-9 -->
+{% endblock %}

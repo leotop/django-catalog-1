@@ -1,0 +1,63 @@
+{% extends "catalog/base.html" %}
+{% load thumbnail %}
+{% load category_extras %}
+
+{% block catalogtree %}
+  {% category_tree %}
+{% endblock %}
+
+{% block content %}
+<div class="col-md-9 col-sm-9">
+<div class="content shadow panel">
+  <div class="panel-heading">Основные категории</div>
+
+  <div class="generic-categories panel-body">
+  <div class="container-fluid">
+
+{% for g in generic_categories %}
+{% if forloop.first %}
+<div class="row">
+{% endif %}
+
+<div class="thumbnail col-sm-3 col-md-3" style="border: none; text-align: center;">
+  <a href="{{ g.get_absolute_url }}" style="vertical-align: middle">
+    <img class="img-rounded" src="{% thumbnail g.image 250x250 %}" />
+    <div class="caption">
+      <h4>{{ g.name }}</h4>
+    </div>
+  </a>
+</div>
+{% if forloop.counter|divisibleby:"4" %}
+</div><!-- /row -->
+<div class="row">
+{% endif %}
+
+{% if forloop.last %}
+</div><!-- /row -->
+{% endif %}
+{% endfor %}
+  {% if oc %}
+  <div class="row other-generic-categories">
+    <h3>Прочие</h3>
+    <ul>
+    {% for i in oc %}
+      <li><a href="{{ i.get_absolute_url }}">{{ i.name }}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  </div><!-- /container -->
+  </div><!-- /panel-body -->
+</div><!-- /content /panel -->
+</div><!-- /col-*-9 -->
+{% endblock %}
+
+{% block extrafooter %}
+<div class="pull-right extrafooter">
+<script type="text/javascript" src="//yandex.st/share/share.js"
+charset="utf-8"></script>
+<div class="yashare-auto-init" data-yashareL10n="ru"
+ data-yashareQuickServices="vkontakte,facebook,odnoklassniki,moimir" data-yashareTheme="counter"
+></div>
+</div>
+{% endblock %}

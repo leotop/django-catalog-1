@@ -1,0 +1,16 @@
+{% load mptt_tags %}
+<div class="panel-heading">Категории</div>
+<div class="categories-tree panel-body">
+  <ul>
+    {% recursetree nodes %}<li{% if node in current_nodes %} class="active"{% endif %}>
+    {% if not node.is_leaf_node %}
+      <a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+      <ul id="cat-node{{ node.id }}" {% if node not in current_nodes %} style="display: none"{% endif %}>
+        {{ children }}
+      </ul>
+    {% else %} {# Не имеет подпунктов #}
+      <a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+    {% endif %}
+    </li>{% endrecursetree %}
+  </ul>
+</div>

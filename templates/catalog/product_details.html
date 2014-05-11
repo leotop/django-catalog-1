@@ -1,0 +1,107 @@
+{% extends "catalog/base.html" %}
+{% load category_extras %}
+{% load thumbnail %}
+
+{% block catalogtree %}
+  {% category_tree p.category_id %}
+{% endblock %}
+
+{% block title %}{{ p.name|safe }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="col-sm-9 col-md-9 col-lg-9">
+<div class="shadow panel">
+  <div class="panel-heading">{{ p.name|safe }}</div>
+
+  <div class="panel-body">
+    <div class="col-md-3">
+  {% if p.get_images|length %}
+    {% for img in p.get_images %}
+    {% if forloop.first %}{# Main picture #}
+    <div class="row product-main-image">
+      <a class="fancybox-thumb" rel="gallery" href="/media/{{ p.get_primary_image }}">
+        <!-- img class="img-thumbnail" src="{% thumbnail img.image 300x300 crop="smart" %}" /-->
+        <img class="img-thumbnail" src="{% thumbnail p.get_primary_image 300x300 crop="smart" %}" />
+      </a>
+    </div>
+    <div class="row">
+    {% else %}{# /Main picture #}
+    <div class="col-sm-4">
+      <a class="fancybox-thumb" rel="gallery" href="/media/{{ img.image }}">
+        <img style="width: 100%" src="{% thumbnail img.image 200x200 crop="smart" %}" />
+      </a>
+    </div>
+    {% endif %}{# /Main picture #}
+    {% if forloop.last %}
+        </div><!-- /row -->
+    {% endif %}
+    {% endfor %}
+  {% endif %}
+
+    <hr>
+
+    <div class="row">
+      <strong>Производитель:</strong> <span class="pull-right"><a href="{{ p.manufacturer.get_absolute_url }}">{{ p.manufacturer.name }}</a></span>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <strong>Цена:</strong> <span class="pull-right"><span class="price price-lg">{{ p.price }}</span></span>
+    </div>
+
+    <div class="row">
+
+      {% if p.on_demand %}
+      <div class="btn btn-info btn-block AddToCartButton" data-product-id="{{ p.id }}">В корзину (под заказ)</div>
+      {% else %}
+      <div class="btn btn-primary btn-block AddToCartButton" data-product-id="{{ p.id }}">В корзину</div>
+      {% endif %}
+
+      {% if editable %}
+      <a class="btn btn-warning btn-block AddToCartButton" href="/admin/catalog/product/{{ p.id }}/">Редактировать</a>
+      {% endif %}
+<!-- Social buttons -->
+<div>
+<h4>Поделиться ссылкой</h4>
+<hr>
+<script type="text/javascript" src="//yandex.st/share/share.js"
+charset="utf-8"></script>
+<div class="yashare-auto-init" data-yashareL10n="ru"
+ data-yashareQuickServices="vkontakte,facebook,odnoklassniki,moimir" data-yashareTheme="counter"
+
+></div>
+</div>
+<!-- /Social buttons -->
+
+    </div>
+    </div><!-- col-md-3 -->
+
+    <div class="col-md-9">
+
+      <div class="product-description">
+        {{ p.description|safe|default:"<em>Описание отсутствует</em>" }}
+      </div>
+
+      {% if pa %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th colspan="2">Характеристики</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in pa %}
+          <tr><td>{{ a.name }}</td>
+              <td>{{ a.value }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div><!-- col-md-9 -->
+
+  </div><!-- /panel-body -->
+</div><!-- /panel -->
+</div>
+{% endblock %}

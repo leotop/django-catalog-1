@@ -1,0 +1,134 @@
+{% extends "catalog/base.html" %}
+{% load url from future %}
+{% load thumbnail %}
+{% load category_extras %}
+
+{% block catalogtree %}
+  {% category_tree category.id %}
+{% endblock %}
+
+{% block title %}{{ category.name|safe }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="col-sm-9">
+  <div class="content shadow panel">
+    <div class="panel-heading">{{ category.name|safe }}</div>
+    <div class="panel-body">
+
+    {% if category.description %}
+    <div class="container-fluid">
+      <div class="row category-description"> {{ category.description }} </div>
+    </div>
+    {% endif %}
+
+    {% if subcategories|length > 0 %}
+    <!-- Subcategory list -->
+    <div class="container-fluid">
+        {% for s in subcategories %}
+        {% if forloop.first %}
+        <div class="row">
+        {% endif %}
+
+        <div class="thumbnail col-sm-3 col-md-3" style="border: none; text-align: center;">
+          <a href="{{ s.get_absolute_url }}" style="vertical-align: middle">
+          {% if s.image %}
+            <img class="img-rounded" src="{% thumbnail s.image 250x250 %}" />
+          {% else %}
+            <img class="img-rounded" src="/static/category_blank.png" />
+          {% endif %}{# if image #}
+            <div class="caption">
+              <h4>{{ s.name }}</h4>
+            </div>
+          </a>
+        </div>
+        {% if forloop.counter|divisibleby:"4" %}
+        </div><!-- /row -->
+        <div class="row">
+        {% endif %}
+
+        {% if forloop.last %}
+        </div><!-- /row -->
+        {% endif %}
+        {% endfor %}
+    </div>
+    <!-- /Subcategory list -->
+    {% if products|length > 0 %}<hr>{% endif %}
+    {% endif %}{# /subcategories|list #}
+
+    {% if products|length > 0 %}
+    <div class="container-fluid">
+      <div class="row">
+        Сортировать по
+        <div class="btn-group" id="TheSorter">
+          <a href="?order=manufacturer__name" id="order-manufacturer__name" class="btn btn-default">
+            <span></span>
+            Производителю</a>
+          <a href="?order=price" id="order-price" class="btn btn-default">
+            <span></span>
+            Цене</a>
+        </div>
+      </div>
+    </div>
+
+      {% if products.paginator.num_pages >= 2 %}
+      <hr>
+      <div class="container-fluid">
+      <ul class="pagination">
+        {% if products.has_previous %}
+        <li><a href="{{ category.get_absolute_url }}page{{ products.previous_page_number }}?{{ queries }}">&laquo;</a>
+        {% endif %}
+
+        {% for pg in products.paginator.page_range %}
+          <li {% if pg == products.number %}class="active" {% endif %}><a href="{{ category.get_absolute_url }}page{{ pg }}?{{ queries }}">{{ pg }}</a>
+        {% endfor %}
+
+        {% if products.has_next %}
+        <li><a href="{{ category.get_absolute_url }}page{{ products.next_page_number }}?{{ queries }}">&raquo;</a>
+        {% endif %}
+      </ul>
+      </div>
+      {% endif %}
+
+    <div class="container-fluid">
+    {% for p in products %}
+      {% if forloop.first %}
+      <div class="row">
+      {% endif %}
+
+      {% include "catalog/product.html" with short_view=1 %}
+
+      {% if forloop.counter|divisibleby:"2" %}
+      </div><!-- /row -->
+      <hr>
+      <div class="row">
+      {% endif %}
+
+      {% if forloop.last %}
+      </div><!-- /row -->
+      {% endif %}
+    {% endfor %}
+    </div>
+    {% endif %}
+
+    </div><!-- /panel-body -->
+
+      {% if products.paginator.num_pages >= 2 %}
+      <div class="panel-footer">
+      <ul class="pagination">
+        {% if products.has_previous %}
+        <li><a href="{{ category.get_absolute_url }}page{{ products.previous_page_number }}?{{ queries }}">&laquo;</a>
+        {% endif %}
+
+        {% for pg in products.paginator.page_range %}
+          <li {% if pg == products.number %}class="active" {% endif %}><a href="{{ category.get_absolute_url }}page{{ pg }}?{{ queries }}">{{ pg }}</a>
+        {% endfor %}
+
+        {% if products.has_next %}
+        <li><a href="{{ category.get_absolute_url }}page{{ products.next_page_number }}?{{ queries }}">&raquo;</a>
+        {% endif %}
+      </ul>
+      </div>
+      {% endif %}
+  </div>
+</div><!-- /col-*-9 -->
+{% endblock %}
