@@ -87,7 +87,7 @@ class Product(models.Model):
             return 0
 
         img = img.image
-        image = Image.open( settings.MEDIA_ROOT + "/" + img.name )
+        image = Image.open( settings.MEDIA_ROOT + "/" + img.name ).convert('RGB')
         watermark = Image.open(settings.STATIC_ROOT + '/logo_text.png')
         opacity = 1
 
