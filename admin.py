@@ -6,8 +6,6 @@ from django.http import HttpResponseRedirect
 from django import forms
 from models import Category, Manufacturer, Product, ProductImages, ProductAttribute
 from mptt.admin import MPTTModelAdmin
-#from ckeditor.widgets import CKEditorWidget
-from django_mptt_admin.admin import DjangoMpttAdmin
 
 # ACTIONS
 def move_to_category(modeladmin, request, queryset):
@@ -68,25 +66,6 @@ class ChangeManufacturerForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
     manufacturer = forms.ModelChoiceField(queryset=Manufacturer.objects.all(), label=u'Новый производитель')
 
-class ProductAdminForm(forms.ModelForm):
-    #description = forms.CharField(widget=CKEditorWidget())
-
-    class Meta:
-        model = Product
-
-class ManufacturerAdminForm(forms.ModelForm):
-    #description = forms.CharField(widget=CKEditorWidget())
-
-    class Meta:
-        model = Manufacturer
-
-class CategoryAdminForm(forms.ModelForm):
-    #description = forms.CharField(widget=CKEditorWidget())
-
-    class Meta:
-        model = Category
-
-
 # ADMIN
 class ProductImageInline(admin.TabularInline):
     model = ProductImages
@@ -112,16 +91,13 @@ class ProductAdmin(admin.ModelAdmin):
 
     inlines = [ProductImageInline, ProductAttributeInline, ]
     ordering = [ 'name', 'price', 'manufacturer', ]
-    form = ProductAdminForm
     actions = [move_to_category, move_to_manufacturer]
 
 class ManufacturerAdmin(admin.ModelAdmin):
     readonly_fields = ['product_list']
     list_display = ('name', 'product_count',)
     ordering = ['name', ]
-    form = ManufacturerAdminForm
 
-#admin.site.register(Category, MPTTModelAdmin)
-admin.site.register(Category, DjangoMpttAdmin)
+admin.site.register(Category, MPTTModelAdmin)
 admin.site.register(Manufacturer, ManufacturerAdmin)
 admin.site.register(Product, ProductAdmin)
