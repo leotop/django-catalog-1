@@ -7,7 +7,11 @@ from models import Product, Category, Manufacturer, ProductImages, ProductAttrib
 
 def generic_categories(request):
     gcat = Category.objects.filter(parent_id=None)
-    return render_to_response("catalog/generic_categories.html", {'generic_categories': gcat,})
+    cat = {'name': u"Основные категории", 'description': u""}
+    return render_to_response("catalog/category.html", {
+        'category': cat,
+        'subcategories': gcat,
+    })
 
 def show_category(request, pk, page=1):
     try:
@@ -59,8 +63,12 @@ def show_product(request, prod_id):
     if request.user.is_authenticated():
         editable = True
 
-    return render_to_response('catalog/product_details.html',
-        {'p': p, 'pa': pa, 'pmi': pmi, 'editable': editable})
+    return render_to_response('catalog/product_details.html', {
+        'p': p,
+        'pa': pa,
+        'pmi': pmi,
+        'editable': editable
+    })
 
 def show_manufacturer(request, pk):
 

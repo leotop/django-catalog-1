@@ -21,7 +21,7 @@
     </div>
     {% endif %}
 
-    {% if subcategories|length > 0 %}
+    {% if subcategories|length %}
     <!-- Subcategory list -->
     <div class="container-fluid">
         {% for s in subcategories %}
@@ -52,10 +52,10 @@
         {% endfor %}
     </div>
     <!-- /Subcategory list -->
-    {% if products|length > 0 %}<hr>{% endif %}
+    {% if products|length %}<hr>{% endif %}
     {% endif %}{# /subcategories|list #}
 
-    {% if products|length > 0 %}
+    {% if products|length %}
     <div class="container-fluid">
       <div class="row">
         Сортировать по
